@@ -7,7 +7,8 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - app
+      app:
+        condition: service_healthy
 
   app:
     container_name: app
@@ -19,6 +20,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   db:
     image: mysql:8.0.37-debian
@@ -44,9 +51,5 @@ services:
         ]
       interval: 5s
       timeout: 10s
+      start_period: 5s
       retries: 3
-
-networks:
-  default:
-    name: fullcycle
-    external: true
