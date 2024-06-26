@@ -9,6 +9,7 @@ export const getPeople = () => {
         resolve(results);
       }
     });
+    connection.end();
   });
 };
 
