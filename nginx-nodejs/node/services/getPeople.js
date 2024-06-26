@@ -1,7 +1,7 @@
 import { connection } from "../db/connection.js";
 
-export const getPeople = () => {
-  return new Promise((resolve, reject) => {
+export const getPeople = async () => {
+  const people = await new Promise((resolve, reject) => {
     connection.query("SELECT * FROM people", (error, results) => {
       if (error) {
         reject(error);
@@ -9,8 +9,9 @@ export const getPeople = () => {
         resolve(results);
       }
     });
-    connection.end();
   });
+
+  return people;
 };
 
 export const getPeopleHTML = async () => {
@@ -22,5 +23,25 @@ export const getPeopleHTML = async () => {
     html.push(`<li>${person.name}</li>`);
   });
   html.push("</ul>");
+
+  connection.end();
+
   return html.join("\n");
+};
+
+export const getPeopleCount = async () => {
+  const count = await new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT COUNT(id) as count FROM people",
+      (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0].count);
+        }
+      }
+    );
+  });
+
+  return count;
 };
