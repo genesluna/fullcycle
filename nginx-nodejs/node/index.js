@@ -5,7 +5,7 @@ import { getPeopleHTML } from "./services/getPeople.js";
 const app = express();
 const port = 3000;
 
-// seedDataBase();
+await seedDataBase();
 
 const html = await getPeopleHTML();
 
